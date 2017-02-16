@@ -1,5 +1,5 @@
 'use strict';
-
+//collaborated with Castro, Brandon, and Morgan
 function Article (opts) {
   // REVIEW: Convert property assignment to a new pattern. Now, ALL properties of `opts` will be
   // assigned as properies of the newly created article object. We'll talk more about forEach() soon!
@@ -43,7 +43,7 @@ Article.prototype.toHtml = function() {
 
 // DONE
 /**
- * OVERVIEW of worked with Castro
+ * OVERVIEW of Article.loadAll
  * - Describe what the method does: Receives data that we query from Sequel server and preps the data for use in our html
  * - Inputs: An array containing data queried from our server
  * - Outputs: for every element in the rows array sort according to date create an article object and store that object onto the all property of the artice constructor function
@@ -64,7 +64,7 @@ Article.loadAll = function(rows) {
 
 // DONE
 /**
- * OVERVIEW of
+ * OVERVIEW of Article.fetchAll
  * - Describe what the method does: checks to see if there are records in the database and then loads or creates the records depending on the result
  * - Inputs: a callback function of article view.initIndexPage which is coming from articleView.js and invoked on index.html
  * - Outputs: no outputs
@@ -105,7 +105,7 @@ Article.fetchAll = function(callback) {
 
 // DONE
 /**
- * OVERVIEW of
+ * OVERVIEW of Article.truncateTable
  * - Describe what the method does: this method on Article called truncateTable takes an parameter of callback and uses AJAX to get and delete the articles url
  * - Inputs: takes the input of artciles url and the truncated data that is given back from the server
  * - Outputs: outputs the truncated data to the console
@@ -125,17 +125,17 @@ Article.truncateTable = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.prototype.insertRecord
+ * - Describe what the method does: adds data to our Sequel database, into the /articles table
+ * - Inputs: an Artcile object instance
+ * - Outputs: logs the data from the insertion
  */
 Article.prototype.insertRecord = function(callback) {
-  // TODO: describe what the following code is doing lines up with app.post
+  // DONE: send an instance of an article object to our articles url to then be stored in database, and then once the object has been stored on database it gives us response that this has been added-lines up with app.post
   $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
-  // TODO: describe what the following code is doing
+  // DONE: checking for existance of callback then call it
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -144,20 +144,20 @@ Article.prototype.insertRecord = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - Describe what the method does: makes an AJAX HTTP request on an article of a particular ID and deletes it. After the AJAX call completes, the data that was deleted is logged, and if a callback function has been passed as an argument, it will run.
+ * - Inputs: callback function argument and the id of instance it is called on
+ * - Outputs: a console log of the data, and the data into the table, updated database
  */
 Article.prototype.deleteRecord = function(callback) {
-  // TODO: describe what the following code is doing ajax call accessing at the articles id
+  // DONE: ajax call accessing at the articles id and uses a method to delete what is located at that instance of article in database
   $.ajax({
     url: `/articles/${this.article_id}`,
     method: 'DELETE'
   })
-  // TODO: describe what the following code is doing
+  // DONE: when ajax call is finished it console logs the data it's received and if a callback function was passed as an argument it is invoked
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -166,19 +166,19 @@ Article.prototype.deleteRecord = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does: This method attaches a prototype of updateRecord to Article.  It uses AJAX to get
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of Article.prototype.updateRecord
+ * - Describe what the method does: This method attaches a prototype of updateRecord to Article.  It uses AJAX to get a particular article id and puts the data listed into the table if a callback function has been passed as an argument, it will run.
+ * - Inputs: article id and the data from the data from within the Article function
+ * - Outputs: the data added to the table
  */
 Article.prototype.updateRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: AJAX call accessing at the instance of a particular articles id and updating the data listed below into the table
   $.ajax({
     url: `/articles/${this.article_id}`,
     method: 'PUT',
-    data: {  // TODO: describe what this object is doing
+    data: {  // DONE: this is giving the properties of the below data to be updated in the table
       author: this.author,
       authorUrl: this.authorUrl,
       body: this.body,
@@ -187,7 +187,7 @@ Article.prototype.updateRecord = function(callback) {
       title: this.title
     }
   })
-  // TODO: describe what the following code is doing
+  // DONE: This is indicating that after the above is inputted into the table then log the data added and if the callback function is there, run the callback function
   .then(function(data) {
     console.log(data);
     if (callback) callback();
