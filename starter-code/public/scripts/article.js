@@ -4,6 +4,7 @@ function Article (opts) {
   // REVIEW: Convert property assignment to a new pattern. Now, ALL properties of `opts` will be
   // assigned as properies of the newly created article object. We'll talk more about forEach() soon!
   // We need to do this so that our Article objects, created from DB records, will have all of the DB columns as properties (i.e. article_id, author_id...)
+  //returns array of the properties of a given object, forEach executes anonymous function on each object in array
   Object.keys(opts).forEach(function(e) {
     this[e] = opts[e]
   }, this);
@@ -40,20 +41,20 @@ Article.prototype.toHtml = function() {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW of worked with Castro
+ * - Describe what the method does: Receives data that we query from Sequel server and preps the data for use in our html
+ * - Inputs: An array containing data queried from our server
+ * - Outputs: for every element in the rows array sort according to date create an article object and store that object onto the all property of the artice constructor function
  */
 Article.loadAll = function(rows) {
-  // TODO: describe what the following code is doing
+  // DONE: if the result of b-a is less than 0 then it will move (a) into a lower postion in the array and come first , if the reuslt is greater than 0 then (b) comes first
   rows.sort(function(a,b) {
     return (new Date(b.publishedOn)) - (new Date(a.publishedOn));
   });
 
-  // TODO: describe what the following code is doing
+  // DONE: for every piece of data at each element in array will instatiate article object based on the data and push that object onto the all property attached to artcile constructor
   rows.forEach(function(ele) {
     Article.all.push(new Article(ele));
   })
@@ -61,25 +62,25 @@ Article.loadAll = function(rows) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - Describe what the method does: checks to see if there are records in the database and then loads or creates the records depending on the result
+ * - Inputs: a callback function of article view.initIndexPage which is coming from articleView.js and invoked on index.html
+ * - Outputs: no outputs
  */
 Article.fetchAll = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: Calling ajax selector for the /articles location
   $.get('/articles')
-  // TODO: describe what the following code is doing
+  // DONE: once the /articles selector has been called then it begins a function with and if/else statement taking the results of .get as it's argument
   .then(
     function(results) {
       if (results.length) { // If records exist in the DB
-        // TODO: describe what the following code is doing
+        // DONE: feed them into the Artcile.loadAll method and invokes articleViewInitIndex page method through the callback alias
         Article.loadAll(results);
         callback();
       } else { // if NO records exist in the DB
-        // TODO: describe what the following code is doing
+        // TODONE: pull the records from the static file hackerIpsum then push those records into database
         $.getJSON('./data/hackerIpsum.json')
         .then(function(rawData) {
           rawData.forEach(function(item) {
@@ -87,11 +88,11 @@ Article.fetchAll = function(callback) {
             article.insertRecord(); // Add each record to the DB
           })
         })
-        // TODO: describe what the following code is doing
+        // DONE: after creating the data in the database come back around and call the fetchAll method with intent of triggering the if result versus the else
         .then(function() {
           Article.fetchAll(callback);
         })
-        // TODO: describe what the following code is doing
+        // DONE: if the output is something other than what is covered in the if/else throw an error and log it to the console
         .catch(function(err) {
           console.error(err);
         });
@@ -102,20 +103,20 @@ Article.fetchAll = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - Describe what the method does: this method on Article called truncateTable takes an parameter of callback and uses AJAX to get and delete the articles url
+ * - Inputs: takes the input of artciles url and the truncated data that is given back from the server
+ * - Outputs: outputs the truncated data to the console
  */
 Article.truncateTable = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: Calling  AJAX selector to get the artciles url and tells it to delete aka truncate that selection from the table
   $.ajax({
     url: '/articles',
     method: 'DELETE',
   })
-  // TODO: describe what the following code is doing
+  // DONE: then creating a function that retreives the data from the server and logs the data to the console, if there is a callback it then executes the callback function
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -132,7 +133,7 @@ Article.truncateTable = function(callback) {
  * - Outputs: identify any outputs and their destination
  */
 Article.prototype.insertRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // TODO: describe what the following code is doing lines up with app.post
   $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
   // TODO: describe what the following code is doing
   .then(function(data) {
@@ -151,7 +152,7 @@ Article.prototype.insertRecord = function(callback) {
  * - Outputs: identify any outputs and their destination
  */
 Article.prototype.deleteRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // TODO: describe what the following code is doing ajax call accessing at the articles id
   $.ajax({
     url: `/articles/${this.article_id}`,
     method: 'DELETE'
@@ -168,7 +169,7 @@ Article.prototype.deleteRecord = function(callback) {
 // TODO
 /**
  * OVERVIEW of
- * - Describe what the method does
+ * - Describe what the method does: This method attaches a prototype of updateRecord to Article.  It uses AJAX to get
  * - Inputs: identify any inputs and their source
  * - Outputs: identify any outputs and their destination
  */
