@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const app = express();
-// TODO: Complete the connection string for the url that will connect to your local postgres database
+// BONE: Complete the connection string for the url that will connect to your local postgres database
 // Your url may require that it's composed of additional information including user and password7
 // NOTE: Students will have varying URLs depending on their OS
 
@@ -69,15 +69,26 @@ app.post('/articles', function(request, response) {
 
 app.put('/articles/:id', function(request, response) {
   client.query(
-    ``, // TODO: Write the SQL query to update an existing record
-    [] // TODO: Get each value from the request's body
+    `UPDATE
+    articles(title, author, "authorUrl", category, "publishedOn", body)
+    WHERE article_id = ${this.article_id}
+    VALUES ($1, $2, $3, $4, $5, $6);`, // DONE: Write the SQL query to update an existing record
+    [
+      request.body.title,
+      request.body.author,
+      request.body.authorUrl,
+      request.body.category,
+      request.body.publishedOn,
+      request.body.body
+    ] // DONE: Get each value from the request's body
   );
   response.send('update complete');
 });
 
 app.delete('/articles/:id', function(request, response) {
   client.query(
-    ``, // TODO: Write the SQL query to delete a record
+    `DELETE FROM articles
+    WHERE article_id = $1;`, // DONE: Write the SQL query to delete a record
     [request.params.id]
   );
   response.send('Delete complete');
@@ -85,7 +96,7 @@ app.delete('/articles/:id', function(request, response) {
 
 app.delete('/articles', function(request, response) {
   client.query(
-    '' // TODO: Write the SQl query to truncate the table
+    `DELETE FROM articles;` // DONE: Write the SQl query to truncate the table
   );
   response.send('Delete complete');
 });
